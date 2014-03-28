@@ -35,8 +35,8 @@ object MyModule {
   }
 
   // Exercise 1: Write a function to compute the nth fibonacci number
-
-  def fib(n: Int): Int = ???
+private val fibs:Stream[Int] = 0 #:: 1 #:: fibs.zip(fibs.tail).map { n => n._1 + n._2 }
+  def fib(n: Int): Int =fibs(n)
 
   // This definition and `formatAbs` are very similar..
   private def formatFactorial(n: Int) = { 
@@ -48,7 +48,7 @@ object MyModule {
   // accept a _function_ as a parameter
   def formatResult(name: String, n: Int, f: Int => Int) = { 
     val msg = "The %s of %d is %d." 
-    msg.format(n, f(n))
+    msg.format(name, n, f(n))
   }
 }
 
@@ -137,20 +137,22 @@ object PolymorphicFunctions {
   // Exercise 3: Implement `partial1`.
   
   def partial1[A,B,C](a: A, f: (A,B) => C): B => C = 
-    ??? 
+    f(a,_)
   
   // Exercise 4: Implement `curry`.
 
   // Note that `=>` associates to the right, so we could 
   // write the return type as `A => B => C`
-  def curry[A,B,C](f: (A, B) => C): A => (B => C) =
-    ??? 
+  def curry[A,B,C](f: (A, B) => C): A => (B => C) ={
+    a:A => b:B => f(a,b) 
+  }
 
   // NB: The `Function2` trait has a `curried` method already
 
   // Exercise 5: Implement `uncurry`
-  def uncurry[A,B,C](f: A => B => C): (A, B) => C =
-    ??? 
+  def uncurry[A,B,C](f: A => B => C): (A, B) => C ={
+     (a,b) => f(a)(b)
+  }
 
   /*
   NB: There is a method on the `Function` object in the standard library,
@@ -164,6 +166,7 @@ object PolymorphicFunctions {
 
   // Exercise 6: Implement `compose`
 
-  def compose[A,B,C](f: B => C, g: A => B): A => C =
-    ??? 
+  def compose[A,B,C](f: B => C, g: A => B): A => C ={
+    a:A => f(g(a))
+  }
 }
