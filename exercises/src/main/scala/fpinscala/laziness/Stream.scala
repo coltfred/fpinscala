@@ -11,7 +11,7 @@ sealed abstract class Stream[+A] { // The abstract base class for streams. It wi
       case None => z
     }
 
-  def exists(p: A => Boolean): Boolean = 
+  def exists(p: A => Boolean): Boolean =
     foldRight(false)((a, b) => p(a) || b) // Here `b` is the unevaluated recursive step that folds the tail of the stream. If `p(a)` returns `true`, `b` will never be evaluated and the computation terminates early.
   def take(n: Int): Stream[A] = sys.error("todo")
 
@@ -30,15 +30,15 @@ sealed abstract class Cons[+A] extends Stream[A] { // A nonempty stream consists
   val uncons = Some(this)
 }
 object Stream {
-    def empty[A]: Stream[A] = Empty // A "smart constructor" for creating an empty stream of a particular type.
-  
-    def cons[A](hd: => A, tl: => Stream[A]): Stream[A] = new Cons[A] { // A "smart constructor" for creating a nonempty stream.
-      lazy val head = hd // The head and tail are implemented by lazy vals.
-      lazy val tail = tl
-    }
-  
-    def apply[A](as: A*): Stream[A] = // A convenient variable-argument method for constructing a `Stream` from multiple elements.
-      if (as.isEmpty) Empty else cons(as.head, apply(as.tail: _*))
+  def empty[A]: Stream[A] = Empty // A "smart constructor" for creating an empty stream of a particular type.
+
+  def cons[A](hd: => A, tl: => Stream[A]): Stream[A] = new Cons[A] { // A "smart constructor" for creating a nonempty stream.
+    lazy val head = hd // The head and tail are implemented by lazy vals.
+    lazy val tail = tl
+  }
+
+  def apply[A](as: A*): Stream[A] = // A convenient variable-argument method for constructing a `Stream` from multiple elements.
+    if (as.isEmpty) Empty else cons(as.head, apply(as.tail: _*))
 
   val ones: Stream[Int] = cons(1, ones)
   def from(n: Int): Stream[Int] = sys.error("todo")

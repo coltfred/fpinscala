@@ -3,7 +3,7 @@ package fpinscala.gettingstarted
 // A comment!
 /* Another comment */
 /** A documentation comment */
-object MyModule { 
+object MyModule {
   def abs(n: Int): Int =
     if (n < 0) -n
     else n
@@ -21,7 +21,7 @@ object MyModule {
     @annotation.tailrec
     def go(n: Int, acc: Int): Int =
       if (n <= 0) acc
-      else go(n-1, n*acc)
+      else go(n - 1, n * acc)
 
     go(n, 1)
   }
@@ -35,19 +35,19 @@ object MyModule {
   }
 
   // Exercise 1: Write a function to compute the nth fibonacci number
-private val fibs:Stream[Int] = 0 #:: 1 #:: fibs.zip(fibs.tail).map { n => n._1 + n._2 }
-  def fib(n: Int): Int =fibs(n)
+  private val fibs: Stream[Int] = 0 #:: 1 #:: fibs.zip(fibs.tail).map { n => n._1 + n._2 }
+  def fib(n: Int): Int = fibs(n)
 
   // This definition and `formatAbs` are very similar..
-  private def formatFactorial(n: Int) = { 
-    val msg = "The absolute value of %d is %d." 
+  private def formatFactorial(n: Int) = {
+    val msg = "The absolute value of %d is %d."
     msg.format(n, factorial(n))
   }
 
   // We can generalize `formatAbs` and `formatFactorial` to 
   // accept a _function_ as a parameter
-  def formatResult(name: String, n: Int, f: Int => Int) = { 
-    val msg = "The %s of %d is %d." 
+  def formatResult(name: String, n: Int, f: Int => Int) = {
+    val msg = "The %s of %d is %d."
     msg.format(name, n, f(n))
   }
 }
@@ -92,13 +92,13 @@ object MonomorphicBinarySearch {
   def binarySearch(ds: Array[Double], key: Double): Int = {
     @annotation.tailrec
     def go(low: Int, mid: Int, high: Int): Int = {
-      if (low > high) -mid - 1 
+      if (low > high) -mid - 1
       else {
-        val mid2 = (low + high) / 2 
+        val mid2 = (low + high) / 2
         val d = ds(mid2) // We index into an array using the same 
-                         // syntax as function application
+        // syntax as function application
         if (d == key) mid2
-        else if (d > key) go(low, mid2, mid2-1)
+        else if (d > key) go(low, mid2, mid2 - 1)
         else go(mid2 + 1, mid2, high)
       }
     }
@@ -108,19 +108,19 @@ object MonomorphicBinarySearch {
 }
 
 object PolymorphicFunctions {
-  
+
   // Here's a polymorphic version of `binarySearch`, parameterized on 
   // a function for testing whether an `A` is greater than another `A`. 
-  def binarySearch[A](as: Array[A], key: A, gt: (A,A) => Boolean): Int = {
+  def binarySearch[A](as: Array[A], key: A, gt: (A, A) => Boolean): Int = {
     @annotation.tailrec
     def go(low: Int, mid: Int, high: Int): Int = {
-      if (low > high) -mid - 1 
+      if (low > high) -mid - 1
       else {
-        val mid2 = (low + high) / 2 
+        val mid2 = (low + high) / 2
         val a = as(mid2)
         val greater = gt(a, key)
-        if (!greater && !gt(key,a)) mid2
-        else if (greater) go(low, mid2, mid2-1)
+        if (!greater && !gt(key, a)) mid2
+        else if (greater) go(low, mid2, mid2 - 1)
         else go(mid2 + 1, mid2, high)
       }
     }
@@ -129,29 +129,29 @@ object PolymorphicFunctions {
 
   // Exercise 2: Implement a polymorphic function to check whether 
   // an `Array[A]` is sorted
-  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = ??? 
-  
+  def isSorted[A](as: Array[A], gt: (A, A) => Boolean): Boolean = ???
+
   // Polymorphic functions are often so constrained by their type
   // that they only have one implementation! Here's an example:
 
   // Exercise 3: Implement `partial1`.
-  
-  def partial1[A,B,C](a: A, f: (A,B) => C): B => C = 
-    f(a,_)
-  
+
+  def partial1[A, B, C](a: A, f: (A, B) => C): B => C =
+    f(a, _)
+
   // Exercise 4: Implement `curry`.
 
   // Note that `=>` associates to the right, so we could 
   // write the return type as `A => B => C`
-  def curry[A,B,C](f: (A, B) => C): A => (B => C) ={
-    a:A => b:B => f(a,b) 
+  def curry[A, B, C](f: (A, B) => C): A => (B => C) = {
+    a: A => b: B => f(a, b)
   }
 
   // NB: The `Function2` trait has a `curried` method already
 
   // Exercise 5: Implement `uncurry`
-  def uncurry[A,B,C](f: A => B => C): (A, B) => C ={
-     (a,b) => f(a)(b)
+  def uncurry[A, B, C](f: A => B => C): (A, B) => C = {
+    (a, b) => f(a)(b)
   }
 
   /*
@@ -166,7 +166,7 @@ object PolymorphicFunctions {
 
   // Exercise 6: Implement `compose`
 
-  def compose[A,B,C](f: B => C, g: A => B): A => C ={
-    a:A => f(g(a))
+  def compose[A, B, C](f: B => C, g: A => B): A => C = {
+    a: A => f(g(a))
   }
 }
